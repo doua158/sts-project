@@ -1,22 +1,24 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Home from "./pages/Home"; // ✅ ajout
+import Home from "./pages/Home";
 import PartenaireLogin from "./pages/Login";
 import PartnerDashboard from "./pages/Dashboard";
+import AdminDashboard from "./pages/AdminDashboard"; // ✅ ajout du dashboard admin
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Home />} /> {/* ✅ route d'accueil */}
-        <Route path="/login" element={<PartenaireLogin />} />
-        <Route path="/dashboard-partenaire" element={<PartnerDashboard />} />
-        <Route path="*" element={<NotFound />} />
+        <Route path="/" element={<Home />} /> {/* ✅ Page d’accueil */}
+        <Route path="/login" element={<PartenaireLogin />} /> {/* ✅ Connexion */}
+        <Route path="/dashboard-partenaire" element={<PartnerDashboard />} /> {/* ✅ Dashboard partenaire */}
+        <Route path="/dashboard-admin" element={<AdminDashboard />} /> {/* ✅ Dashboard admin */}
+        <Route path="*" element={<NotFound />} /> {/* ✅ Page 404 */}
       </Routes>
     </Router>
   );
 }
 
-// ✅ Composant 404
+// ✅ Page 404
 function NotFound() {
   return (
     <div className="flex flex-col justify-center items-center h-screen text-center bg-gray-100">

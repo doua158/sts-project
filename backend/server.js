@@ -5,17 +5,20 @@ const path = require("path");
 
 const app = express();
 
-// ✅ Importer les routes
+// ✅ Importer les routes une seule fois
 const adminRoutes = require("./routes/admin");
 const partnerRoutes = require("./routes/partner");
 const employeeRoutes = require("./routes/employees");
-
 
 // ✅ Middlewares
 app.use(cors());
 app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+// ✅ Activer les routes
 app.use("/api/employee", employeeRoutes);
+app.use("/api/admin", adminRoutes);
+app.use("/api/partner", partnerRoutes);
 
 // ✅ Connexion MongoDB
 mongoose.connect("mongodb://localhost:27017/sts", {
@@ -25,10 +28,7 @@ mongoose.connect("mongodb://localhost:27017/sts", {
 .then(() => console.log("✅ MongoDB connecté"))
 .catch((err) => console.error("❌ MongoDB erreur :", err));
 
-// ✅ Activer les routes
-app.use("/api/admin", adminRoutes);
-app.use("/api/partner", partnerRoutes); // ✅ Une seule fois
-
+// ✅ Démarrer le serveur
 const PORT = 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);

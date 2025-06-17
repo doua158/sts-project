@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const path = require("path");
 require("dotenv").config(); // ✅ Chargement des variables d'environnement
 
-
 const app = express();
 
 // ✅ Importer les routes une seule fois
@@ -30,8 +29,8 @@ mongoose.connect(process.env.MONGO_URI, {
 .then(() => console.log("✅ MongoDB Atlas connecté"))
 .catch((err) => console.error("❌ Erreur de connexion MongoDB :", err));
 
-// ✅ Démarrer le serveur
+// ✅ Démarrer le serveur — important pour Render : 0.0.0.0
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`🚀 Serveur backend démarré sur http://localhost:${PORT}`);
+app.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Serveur backend démarré sur http://0.0.0.0:${PORT}`);
 });

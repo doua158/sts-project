@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// ✅ URL du backend depuis .env (React)
+const API_BASE = process.env.REACT_APP_API_URL;
+
 export default function DashboardAdmin() {
   const [partenaires, setPartenaires] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [loading, setLoading] = useState(true);
-  const [costSummary, setCostSummary] = useState(null); // Sommaire des coûts
+  const [costSummary, setCostSummary] = useState(null);
 
   useEffect(() => {
-    // Vérification de la connexion admin
     const token = localStorage.getItem("adminToken");
     if (!token) {
-      window.location.href = "/login"; // Rediriger vers la page de login si non connecté
+      window.location.href = "/login";
+      return;
     }
 
-    // Charger la liste des partenaires
     axios
-      .get("http://localhost:5000/api/admin/partners-summary")
+      .get(`${API_BASE}/api/admin/partners-summary`)
       .then((res) => {
         setPartenaires(res.data);
         setLoading(false);
@@ -27,24 +29,19 @@ export default function DashboardAdmin() {
       });
   }, []);
 
-  // ✅ Filtrage en fonction du terme recherché
   const filtered = partenaires.filter((p) =>
     p.entreprise.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  // ✅ Déconnexion
   const handleLogout = () => {
-    localStorage.removeItem("adminToken"); // Supprimer le token admin
-    window.location.href = "/login"; // Rediriger vers la page de connexion
+    localStorage.removeItem("adminToken");
+    window.location.href = "/login";
   };
 
-  // ✅ Afficher le sommaire des coûts pour un partenaire
   const handleShowCostSummary = (partenaireId, nbEmployes) => {
-    const montantParEmploye = 50; // Montant par employé (exemple)
-    const rabais = 0.20; // Exemple de rabais de 20% (peut être dynamique)
-    
-    // Calculer le coût total pour le partenaire
-    const totalCost = nbEmployes * montantParEmploye * (1 - rabais); // Appliquer le rabais
+    const montantParEmploye = 50;
+    const rabais = 0.20;
+    const totalCost = nbEmployes * montantParEmploye * (1 - rabais);
     setCostSummary({ partenaireId, totalCost, nbEmployes });
   };
 
@@ -55,7 +52,6 @@ export default function DashboardAdmin() {
     >
       <div className="absolute inset-0 bg-[#001e3c]/80 z-0" />
 
-      {/* Header */}
       <div className="relative z-10 flex justify-between items-center px-6 py-4">
         <img src="/sts-logo.png" alt="STS" className="h-10" />
         <div className="flex gap-4 items-center">
@@ -66,14 +62,12 @@ export default function DashboardAdmin() {
         </div>
       </div>
 
-      {/* Contenu */}
       <div className="relative z-10 flex-grow px-6 pb-12 flex justify-center items-start">
         <div className="bg-white/95 p-10 rounded-2xl shadow-lg w-full max-w-6xl">
           <h2 className="text-2xl font-bold mb-6 text-[#003865] text-center">
             Liste des sociétés partenaires
           </h2>
 
-          {/* Barre de recherche */}
           <div className="mb-6 text-center">
             <input
               type="text"
@@ -130,11 +124,15 @@ export default function DashboardAdmin() {
             </table>
           )}
 
-          {/* Sommaire des coûts */}
           {costSummary && (
             <div className="mt-6 p-4 bg-blue-100 rounded">
-              <h3 className="text-lg font-semibold">Sommaire des coûts pour {costSummary.nbEmployes} employés</h3>
-              <p>Coût total (avec rabais appliqué) : <strong>{costSummary.totalCost} CAD</strong></p>
+              <h3 className="text-lg font-semibold">
+                Sommaire des coûts pour {costSummary.nbEmployes} employés
+              </h3>
+              <p>
+                Coût total (avec rabais appliqué) :{" "}
+                <strong>{costSummary.totalCost.toFixed(2)} CAD</strong>
+              </p>
             </div>
           )}
         </div>

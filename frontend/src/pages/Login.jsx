@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+// ✅ URL du backend depuis .env
+const API_BASE = process.env.REACT_APP_API_URL;
+
 export default function PartenaireLogin() {
   const [lang, setLang] = useState("fr");
 
@@ -55,7 +58,6 @@ export default function PartenaireLogin() {
     },
   };
 
-  // ✅ Redirige si déjà connecté
   useEffect(() => {
     if (localStorage.getItem("partenaireId")) {
       window.location.href = "/dashboard-partenaire";
@@ -64,14 +66,12 @@ export default function PartenaireLogin() {
     }
   }, []);
 
-  // ✅ Connexion partenaire
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post("http://localhost:5000/api/partner/login", login);
+      const response = await axios.post(`${API_BASE}/api/partner/login`, login);
       const partner = response.data?.partner;
-
       if (partner && partner._id) {
         localStorage.setItem("partenaireId", partner._id);
         window.location.href = "/dashboard-partenaire";
@@ -83,12 +83,11 @@ export default function PartenaireLogin() {
     }
   };
 
-  // ✅ Connexion admin
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setAdminError("");
     try {
-      const response = await axios.post("http://localhost:5000/api/admin/login", adminLogin);
+      const response = await axios.post(`${API_BASE}/api/admin/login`, adminLogin);
       localStorage.setItem("adminToken", response.data?.token);
       window.location.href = "/dashboard-admin";
     } catch (err) {
@@ -96,12 +95,11 @@ export default function PartenaireLogin() {
     }
   };
 
-  // ✅ Inscription partenaire
   const handleRegister = async (e) => {
     e.preventDefault();
     setRegisterMessage("");
     try {
-      await axios.post("http://localhost:5000/api/partner/register", register);
+      await axios.post(`${API_BASE}/api/partner/register`, register);
       setRegisterMessage(t[lang].success);
       setRegister({
         entreprise: "",
@@ -129,7 +127,6 @@ export default function PartenaireLogin() {
 
       <div className="relative z-10 flex-grow flex justify-center items-center px-6 py-12">
         <div className="bg-white/95 rounded-xl shadow-lg w-full max-w-6xl flex flex-wrap overflow-hidden">
-          {/* Connexion Partenaire et Admin */}
           <div className="w-full md:w-1/2 p-8 border-r border-gray-200">
             <h2 className="text-2xl font-bold mb-4 text-[#003865] text-center">{t[lang].loginTitle}</h2>
             <form onSubmit={handleLogin}>
@@ -148,7 +145,6 @@ export default function PartenaireLogin() {
             </form>
           </div>
 
-          {/* Inscription Partenaire */}
           <div className="w-full md:w-1/2 p-8">
             <h2 className="text-xl font-bold mb-4 text-[#003865] text-center">{t[lang].registerTitle}</h2>
             <form onSubmit={handleRegister}>

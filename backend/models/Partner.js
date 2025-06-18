@@ -10,3 +10,4 @@ const partnerSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Partner", partnerSchema);
+// Force update pour Git et Render

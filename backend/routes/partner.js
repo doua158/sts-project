@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcryptjs");
-const Partner = require("../models/partner");
+const Partner = require("../models/Partner");
 
 // ✅ Inscription partenaire
 router.post("/register", async (req, res) => {

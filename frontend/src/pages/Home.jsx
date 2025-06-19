@@ -1,17 +1,22 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import API from "./api";
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-[#f4f4f4] flex flex-col items-center justify-center p-4 text-center">
-      <h1 className="text-4xl font-bold text-[#12365b] mb-2">Programme Solidarité Transport</h1>
-      <p className="text-lg text-[#4A5568] mb-6 max-w-xl">
-        Offrez à votre clientèle un accès au transport collectif à tarif réduit à Sherbrooke.
-        Ce portail permet aux organismes partenaires d’inscrire rapidement leurs bénéficiaires.
-      </p>
-      <Link to="/login" className="bg-[#217da0] text-white px-6 py-2 rounded-lg shadow hover:bg-[#195d73] transition">
-        Accéder à l'espace partenaire
-      </Link>
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-blue-200">
+      <div className="bg-white p-12 rounded-xl shadow-2xl text-center w-full max-w-lg">
+        <img src="/sts-logo.png" alt="STS Logo" className="h-16 mx-auto mb-6" />
+        <h1 className="text-3xl font-bold text-blue-900 mb-4">Bienvenue sur la plateforme STS</h1>
+        <p className="text-gray-700 mb-6">
+          Veuillez vous connecter ou vous inscrire pour accéder à votre espace partenaire ou administrateur.
+        </p>
+        <div className="flex flex-col space-y-4">
+          <Link to="/login" className="bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700 transition">
+            Connexion / Inscription
+          </Link>
+        </div>
+      </div>
     </div>
   );
 }

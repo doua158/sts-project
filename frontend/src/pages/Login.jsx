@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import API from "./api";
+import axios from "axios";
 
 const API_BASE = process.env.REACT_APP_API_URL;
 
@@ -69,7 +69,7 @@ export default function PartenaireLogin() {
     e.preventDefault();
     setError("");
     try {
-      const response = await API.post("/api/partner/login", login);
+      const response = await axios.post(`${API_BASE}/api/partner/login`, login);
       const partner = response.data?.partner;
       if (partner && partner._id) {
         localStorage.setItem("partenaireId", partner._id);
@@ -86,7 +86,7 @@ export default function PartenaireLogin() {
     e.preventDefault();
     setAdminError("");
     try {
-      const response = await API.post("/api/admin/login", adminLogin);
+      const response = await axios.post(`${API_BASE}/api/admin/login`, adminLogin);
       localStorage.setItem("adminToken", response.data?.token);
       window.location.href = "/dashboard-admin";
     } catch (err) {
@@ -98,7 +98,7 @@ export default function PartenaireLogin() {
     e.preventDefault();
     setRegisterMessage("");
     try {
-      await API.post("/api/partner/register", register);
+      await axios.post(`${API_BASE}/api/partner/register`, register);
       setRegisterMessage(t[lang].success);
       setRegister({
         entreprise: "",

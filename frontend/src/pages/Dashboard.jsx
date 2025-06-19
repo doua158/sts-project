@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import API from "./api";
+import axios from "axios";
 
 const Dashboard = () => {
   const [employees, setEmployees] = useState([]);
@@ -8,7 +8,7 @@ const Dashboard = () => {
 
   const fetchEmployees = async () => {
     try {
-      const response = await API.get(`/api/employee/by-partner/${partenaireId}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/employee/by-partner/${partenaireId}`);
       setEmployees(response.data);
     } catch (error) {
       console.error("Erreur lors de la récupération des employés :", error);
@@ -21,7 +21,7 @@ const Dashboard = () => {
 
   const handleAddEmployee = async () => {
     try {
-      await API.post("/api/employee/add", { ...newEmployee, partenaireId });
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/employee/add`, { ...newEmployee, partenaireId });
       fetchEmployees();
       setNewEmployee({ name: "", age: "", role: "" });
     } catch (error) {
@@ -31,7 +31,7 @@ const Dashboard = () => {
 
   const handleDeleteEmployee = async (id) => {
     try {
-      await API.delete(`/api/employee/delete/${id}`);
+      await axios.delete(`${process.env.REACT_APP_API_URL}/api/employee/delete/${id}`);
       fetchEmployees();
     } catch (error) {
       console.error("Erreur lors de la suppression de l'employé :", error);

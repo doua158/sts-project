@@ -39,35 +39,8 @@ const Dashboard = () => {
   };
 
   return (
-    <div>
-      <h1>Dashboard Partenaire</h1>
-      <div>
-        <input
-          placeholder="Nom"
-          value={newEmployee.name}
-          onChange={(e) => setNewEmployee({ ...newEmployee, name: e.target.value })}
-        />
-        <input
-          placeholder="Âge"
-          value={newEmployee.age}
-          onChange={(e) => setNewEmployee({ ...newEmployee, age: e.target.value })}
-        />
-        <input
-          placeholder="Rôle"
-          value={newEmployee.role}
-          onChange={(e) => setNewEmployee({ ...newEmployee, role: e.target.value })}
-        />
-        <button onClick={handleAddEmployee}>Ajouter Employé</button>
-      </div>
-      <ul>
-        {employees.map((emp) => (
-          <li key={emp._id}>
-            {emp.name} - {emp.age} - {emp.role}
-            <button onClick={() => handleDeleteEmployee(emp._id)}>Supprimer</button>
-          </li>
-        ))}
-      </ul>
-    </div>
+    // garde ton interface ici aussi
+    <div>... tableau des employés</div>
   );
 };
 

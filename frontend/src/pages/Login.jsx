@@ -4,7 +4,6 @@ import axios from "axios";
 const API_BASE = process.env.REACT_APP_API_URL;
 
 export default function Login() {
-  const [lang, setLang] = useState("fr");
   const [login, setLogin] = useState({ email: "", password: "" });
   const [error, setError] = useState("");
   const [adminLogin, setAdminLogin] = useState({ email: "", password: "" });
@@ -37,7 +36,7 @@ export default function Login() {
         localStorage.setItem("partenaireId", partner._id);
         window.location.href = "#/dashboard-partenaire";
       } else {
-        setError("❌ Identifiants invalides ou données manquantes.");
+        setError("❌ Identifiants invalides.");
       }
     } catch (err) {
       setError("❌ " + (err.response?.data?.message || "Erreur serveur"));
@@ -61,111 +60,40 @@ export default function Login() {
     setRegisterMessage("");
     try {
       await axios.post(`${API_BASE}/api/partner/register`, register);
-      setRegisterMessage("✅ Partenaire enregistré avec succès !");
-      setRegister({
-        entreprise: "",
-        responsable: "",
-        adresse: "",
-        email: "",
-        phone: "",
-        password: "",
-      });
+      setRegisterMessage("✅ Inscription réussie !");
+      setRegister({ entreprise: "", responsable: "", adresse: "", email: "", phone: "", password: "" });
     } catch (err) {
       setRegisterMessage("❌ " + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div style={{ padding: "2rem", maxWidth: "600px", margin: "0 auto" }}>
-      <h1>Connexion Partenaire</h1>
+    <div style={{ padding: "2rem" }}>
+      <h2>Connexion Partenaire</h2>
       <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          placeholder="Email"
-          value={login.email}
-          onChange={(e) => setLogin({ ...login, email: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={login.password}
-          onChange={(e) => setLogin({ ...login, password: e.target.value })}
-          required
-        />
-        <button type="submit">Connexion</button>
+        <input type="email" placeholder="Email" value={login.email} onChange={(e) => setLogin({ ...login, email: e.target.value })} required />
+        <input type="password" placeholder="Mot de passe" value={login.password} onChange={(e) => setLogin({ ...login, password: e.target.value })} required />
+        <button type="submit">Se connecter</button>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </form>
 
-      <hr />
-
-      <h1>Connexion Admin</h1>
+      <h2>Connexion Admin</h2>
       <form onSubmit={handleAdminLogin}>
-        <input
-          type="email"
-          placeholder="Email admin"
-          value={adminLogin.email}
-          onChange={(e) => setAdminLogin({ ...adminLogin, email: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe admin"
-          value={adminLogin.password}
-          onChange={(e) => setAdminLogin({ ...adminLogin, password: e.target.value })}
-          required
-        />
+        <input type="email" placeholder="Email" value={adminLogin.email} onChange={(e) => setAdminLogin({ ...adminLogin, email: e.target.value })} required />
+        <input type="password" placeholder="Mot de passe" value={adminLogin.password} onChange={(e) => setAdminLogin({ ...adminLogin, password: e.target.value })} required />
         <button type="submit">Connexion Admin</button>
         {adminError && <p style={{ color: "red" }}>{adminError}</p>}
       </form>
 
-      <hr />
-
-      <h1>Inscription Partenaire</h1>
+      <h2>Inscription Partenaire</h2>
       <form onSubmit={handleRegister}>
-        <input
-          type="text"
-          placeholder="Entreprise"
-          value={register.entreprise}
-          onChange={(e) => setRegister({ ...register, entreprise: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Responsable"
-          value={register.responsable}
-          onChange={(e) => setRegister({ ...register, responsable: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Adresse"
-          value={register.adresse}
-          onChange={(e) => setRegister({ ...register, adresse: e.target.value })}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={register.email}
-          onChange={(e) => setRegister({ ...register, email: e.target.value })}
-          required
-        />
-        <input
-          type="text"
-          placeholder="Téléphone"
-          value={register.phone}
-          onChange={(e) => setRegister({ ...register, phone: e.target.value })}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Mot de passe"
-          value={register.password}
-          onChange={(e) => setRegister({ ...register, password: e.target.value })}
-          required
-        />
-        <button type="submit">Inscription</button>
+        <input type="text" placeholder="Entreprise" value={register.entreprise} onChange={(e) => setRegister({ ...register, entreprise: e.target.value })} required />
+        <input type="text" placeholder="Responsable" value={register.responsable} onChange={(e) => setRegister({ ...register, responsable: e.target.value })} required />
+        <input type="text" placeholder="Adresse" value={register.adresse} onChange={(e) => setRegister({ ...register, adresse: e.target.value })} required />
+        <input type="email" placeholder="Email" value={register.email} onChange={(e) => setRegister({ ...register, email: e.target.value })} required />
+        <input type="text" placeholder="Téléphone" value={register.phone} onChange={(e) => setRegister({ ...register, phone: e.target.value })} required />
+        <input type="password" placeholder="Mot de passe" value={register.password} onChange={(e) => setRegister({ ...register, password: e.target.value })} required />
+        <button type="submit">S’inscrire</button>
         {registerMessage && <p>{registerMessage}</p>}
       </form>
     </div>

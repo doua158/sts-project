@@ -14,11 +14,12 @@ export default function PartenaireLogin() {
   });
   const [registerMessage, setRegisterMessage] = useState("");
 
+  // Redirection si déjà connecté
   useEffect(() => {
     if (localStorage.getItem("partenaireId")) {
-      window.location.href = "/dashboard-partenaire";
+      window.location.href = "#/dashboard-partenaire";
     } else if (localStorage.getItem("adminToken")) {
-      window.location.href = "/dashboard-admin";
+      window.location.href = "#/dashboard-admin";
     }
   }, []);
 
@@ -30,7 +31,7 @@ export default function PartenaireLogin() {
       const partner = response.data?.partner;
       if (partner && partner._id) {
         localStorage.setItem("partenaireId", partner._id);
-        window.location.href = "/dashboard-partenaire";
+        window.location.href = "#/dashboard-partenaire";
       } else {
         setError("❌ Identifiants invalides ou données manquantes.");
       }
@@ -45,7 +46,7 @@ export default function PartenaireLogin() {
     try {
       const response = await axios.post(`${API_BASE}/api/admin/login`, adminLogin);
       localStorage.setItem("adminToken", response.data?.token);
-      window.location.href = "/dashboard-admin";
+      window.location.href = "#/dashboard-admin";
     } catch (err) {
       setAdminError("❌ " + (err.response?.data?.message || err.message));
     }
@@ -64,7 +65,9 @@ export default function PartenaireLogin() {
   };
 
   return (
-    // ici tu gardes ton interface JSX existante (inchangée)
-    <div>... ton interface</div>
+    <div>
+      {/* Ton interface JSX ici */}
+      {/* Formulaires de connexion admin, partenaire, et d’inscription */}
+    </div>
   );
 }

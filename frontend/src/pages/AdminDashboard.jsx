@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function DashboardAdmin() {
   const [partenaires, setPartenaires] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [showCostSummary, setShowCostSummary] = useState(false);
   const [costSummary, setCostSummary] = useState(null);
 
-  // ✅ Fonctions API intégrées
   const getPartenairesSummary = () => {
-    return axios.get("http://localhost:5000/api/admin/partners-summary");
+    return axios.get(`${API}/api/admin/partners-summary`);
   };
 
   const getEmployeesByPartner = (id) => {
-    return axios.get(`http://localhost:5000/api/employee/by-partner/${id}`);
+    return axios.get(`${API}/api/employee/by-partner/${id}`);
   };
 
   useEffect(() => {

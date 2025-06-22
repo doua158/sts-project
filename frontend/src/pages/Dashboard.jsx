@@ -3,6 +3,8 @@ import axios from "axios";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 
+const API = process.env.REACT_APP_API_URL;
+
 export default function PartnerDashboard() {
   const [tab, setTab] = useState("list");
   const [employes, setEmployes] = useState([]);
@@ -13,18 +15,10 @@ export default function PartnerDashboard() {
 
   const partenaireId = localStorage.getItem("partenaireId");
 
-  // ✅ Fonctions API intégrées
-  const getEmployesByPartner = (id) => {
-    return axios.get(`http://localhost:5000/api/employee/by-partner/${id}`);
-  };
-
-  const addEmploye = (data) => {
-    return axios.post("http://localhost:5000/api/employee/add", data);
-  };
-
-  const deleteEmploye = (id) => {
-    return axios.delete(`http://localhost:5000/api/employee/${id}`);
-  };
+  // ✅ Fonctions API
+  const getEmployesByPartner = (id) => axios.get(`${API}/api/employee/by-partner/${id}`);
+  const addEmploye = (data) => axios.post(`${API}/api/employee/add`, data);
+  const deleteEmploye = (id) => axios.delete(`${API}/api/employee/${id}`);
 
   const formatCAD = (value) =>
     new Intl.NumberFormat("fr-CA", {

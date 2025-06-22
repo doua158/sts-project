@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_BASE = process.env.REACT_APP_API_URL;
+
 export default function PartenaireLogin() {
   const [lang, setLang] = useState("fr");
 
@@ -57,54 +59,48 @@ export default function PartenaireLogin() {
 
   useEffect(() => {
     const partenaireId = localStorage.getItem("partenaireId");
+    const adminToken = localStorage.getItem("adminToken");
     if (partenaireId) {
-      window.location.href = "/dashboard-partenaire";
+      window.location.href = "#/dashboard-partenaire";
+    } else if (adminToken) {
+      window.location.href = "#/dashboard-admin";
     }
   }, []);
 
-  // ✅ Connexion partenaire
   const handleLogin = async (e) => {
     e.preventDefault();
     setError("");
     try {
-      const response = await axios.post("http://localhost:5000/api/partner/login", login);
-      console.log("✅ Réponse partenaire :", response.data);
-
+      const response = await axios.post(`${API_BASE}/api/partner/login`, login);
       const partner = response.data?.partner;
-
       if (partner && partner._id) {
         localStorage.setItem("partenaireId", partner._id);
-        window.location.href = "/dashboard-partenaire";
+        window.location.href = "#/dashboard-partenaire";
       } else {
         setError("❌ Identifiants invalides ou données manquantes.");
       }
     } catch (err) {
-      console.error("❌ Erreur de connexion :", err);
       setError("❌ " + (err.response?.data?.message || "Erreur serveur"));
     }
   };
 
-  // ✅ Connexion admin
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setAdminError("");
     try {
-      const response = await axios.post("http://localhost:5000/api/admin/login", adminLogin);
-      alert("✅ Connexion admin réussie !");
-      console.log("🛡️ Token Admin :", response.data?.token);
-      window.location.href = "/dashboard-admin";
+      const response = await axios.post(`${API_BASE}/api/admin/login`, adminLogin);
+      localStorage.setItem("adminToken", response.data?.token);
+      window.location.href = "#/dashboard-admin";
     } catch (err) {
-      console.error("❌ Erreur admin :", err);
       setAdminError("❌ " + (err.response?.data?.message || err.message));
     }
   };
 
-  // ✅ Inscription partenaire
   const handleRegister = async (e) => {
     e.preventDefault();
     setRegisterMessage("");
     try {
-      await axios.post("http://localhost:5000/api/partner/register", register);
+      await axios.post(`${API_BASE}/api/partner/register`, register);
       setRegisterMessage(t[lang].success);
       setRegister({
         entreprise: "",
@@ -115,7 +111,6 @@ export default function PartenaireLogin() {
         password: "",
       });
     } catch (err) {
-      console.error("❌ Erreur inscription :", err);
       setRegisterMessage("❌ " + (err.response?.data?.message || err.message));
     }
   };

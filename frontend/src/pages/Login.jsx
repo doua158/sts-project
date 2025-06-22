@@ -57,15 +57,21 @@ export default function PartenaireLogin() {
     },
   };
 
-  useEffect(() => {
+ useEffect(() => {
+  const path = window.location.pathname;
+
+  if (path === "/login") {
     const partenaireId = localStorage.getItem("partenaireId");
-    const adminToken = localStorage.getItem("adminToken");
     if (partenaireId) {
-      window.location.href = "#/dashboard-partenaire";
-    } else if (adminToken) {
-      window.location.href = "#/dashboard-admin";
+      window.location.href = "/dashboard-partenaire";
     }
-  }, []);
+
+    const adminToken = localStorage.getItem("adminToken");
+    if (adminToken) {
+      window.location.href = "/dashboard-admin";
+    }
+  }
+}, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();

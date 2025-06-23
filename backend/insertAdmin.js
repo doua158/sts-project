@@ -1,25 +1,31 @@
 const mongoose = require("mongoose");
-const Admin = require("../models/Admin"); // ✅ Supprimé l’espace inutile
+const bcrypt = require("bcrypt");
+const Admin = require("./models/Admin");
 
-mongoose.connect("mongodb://localhost:27017/sts", {
+// 🔗 Remplace par ton URI Atlas
+const uri = "mongodb+srv://omranidoua:14707902doua@cluster0.26xvhmp.mongodb.net/sts?retryWrites=true&w=majority&appName=Cluster0";
+
+mongoose.connect(uri, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
 .then(async () => {
-  const exists = await Admin.findOne({ email: "admin@test.com" }); // ✅ correspond à l'email qu'on veut insérer
+  const exists = await Admin.findOne({ email: "admin@test.com" });
 
   if (exists) {
-    console.log("⚠️ L'admin existe déjà dans la base de données.");
+    console.log("⚠️ L'admin existe déjà.");
     return mongoose.disconnect();
   }
 
+  const hashedPassword = await bcrypt.hash("admin123", 10); // mot de passe chiffré
+
   const admin = new Admin({
     email: "admin@test.com",
-    password: "admin123", // ⚠️ Non chiffré : à sécuriser avec bcrypt si nécessaire
+    password: hashedPassword,
   });
 
   await admin.save();
-  console.log("✅ Admin ajouté avec succès !");
+  console.log("✅ Admin sécurisé inséré avec succès !");
   mongoose.disconnect();
 })
-.catch((err) => console.error("❌ Erreur de connexion MongoDB :", err));
+.catch((err) => console.error("❌ Erreur MongoDB :", err));

@@ -1,5 +1,5 @@
 const mongoose = require("mongoose");
-const Admin = require("./models/Admin"); // ✅ Supprimé l’espace inutile
+const Admin = require("../models/Admin"); // ✅ Supprimé l’espace inutile
 
 mongoose.connect("mongodb://localhost:27017/sts", {
   useNewUrlParser: true,

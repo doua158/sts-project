@@ -3,14 +3,14 @@ const router = express.Router();
 const path = require("path");
 const bcrypt = require("bcrypt");
 
-// 🔒 Modèles
 const Admin = require(path.join(__dirname, "..", "models", "Admin"));
 const Partner = require(path.join(__dirname, "..", "models", "Partner"));
 const Employee = require(path.join(__dirname, "..", "models", "Employee"));
 
-// ✅ Connexion admin sécurisée avec bcrypt
+// ✅ Connexion sécurisée admin
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const admin = await Admin.findOne({ email });
     if (!admin) {
@@ -29,7 +29,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Résumé des partenaires + nombre d'employés
+// ✅ Résumé des partenaires avec nombre d’employés
 router.get("/partners-summary", async (req, res) => {
   try {
     const partners = await Partner.find();

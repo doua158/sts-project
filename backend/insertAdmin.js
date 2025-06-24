@@ -1,31 +1,27 @@
+// insertAdmin.js
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
 const Admin = require("./models/Admin");
 
-// 🔗 Remplace par ton URI Atlas
-const uri = "mongodb+srv://omranidoua:14707902doua@cluster0.26xvhmp.mongodb.net/sts?retryWrites=true&w=majority&appName=Cluster0";
+const MONGODB_URI = "mongodb+srv://omranidoua:14707902doua@cluster0.26xvhmp.mongodb.net/sts?retryWrites=true&w=majority&appName=Cluster0";
 
-mongoose.connect(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
-.then(async () => {
-  const exists = await Admin.findOne({ email: "admin@test.com" });
+mongoose.connect(MONGODB_URI)
+  .then(async () => {
+    console.log("✅ Connexion MongoDB réussie");
 
-  if (exists) {
-    console.log("⚠️ L'admin existe déjà.");
-    return mongoose.disconnect();
-  }
+    // Supprime les anciens admins (optionnel)
+    await Admin.deleteMany({});
 
-  const hashedPassword = await bcrypt.hash("admin123", 10); // mot de passe chiffré
+    // Hash du mot de passe
+    const hashedPassword = await bcrypt.hash("admin123", 10);
 
-  const admin = new Admin({
-    email: "admin@test.com",
-    password: hashedPassword,
-  });
+    const admin = new Admin({
+      email: "admin@test.com",
+      password: hashedPassword,
+    });
 
-  await admin.save();
-  console.log("✅ Admin sécurisé inséré avec succès !");
-  mongoose.disconnect();
-})
-.catch((err) => console.error("❌ Erreur MongoDB :", err));
+    await admin.save();
+    console.log("✅ Admin sécurisé inséré avec succès !");
+    mongoose.disconnect();
+  })
+  .catch((err) => console.error("❌ Erreur MongoDB :", err));

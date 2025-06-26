@@ -11,13 +11,13 @@ router.post("/add", async (req, res) => {
       partenaireId,
       nom,
       carte,
-      rabais
+      rabais,
     });
 
     await newEmp.save();
-    res.status(201).json({ message: "Employé ajouté" });
+    res.status(201).json({ message: "Employé ajouté avec succès", employee: newEmp });
   } catch (err) {
-    console.error("Erreur ajout employé :", err);
+    console.error("❌ Erreur ajout employé :", err);
     res.status(500).json({ message: "Erreur serveur", error: err.message });
   }
 });
@@ -26,9 +26,9 @@ router.post("/add", async (req, res) => {
 router.get("/by-partner/:id", async (req, res) => {
   try {
     const employes = await Employee.find({ partenaireId: req.params.id });
-    res.json(employes);
+    res.status(200).json(employes);
   } catch (err) {
-    console.error("Erreur chargement employés :", err);
+    console.error("❌ Erreur chargement employés :", err);
     res.status(500).json({ message: "Erreur serveur" });
   }
 });

@@ -7,19 +7,17 @@ const Admin = require(path.join(__dirname, "..", "models", "Admin"));
 const Partner = require(path.join(__dirname, "..", "models", "Partner"));
 const Employee = require(path.join(__dirname, "..", "models", "Employee"));
 
-// ✅ Connexion sécurisée admin
+// 🔐 Route de connexion admin
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-  console.log("📥 Reçu côté backend :", email, password); // 👈 AJOUT
+
   try {
     const admin = await Admin.findOne({ email });
-    console.log("🔍 Admin trouvé :", admin); // 👈 AJOUT
     if (!admin) {
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
-    console.log("🔐 bcrypt result:", isMatch); // 👈 AJOUT
     if (!isMatch) {
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }
@@ -31,30 +29,21 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// ✅ Résumé des partenaires avec nombre d’employés
-router.get("/partners-summary", async (req, res) => {
+// 🆕 ROUTE TEMPORAIRE pour insérer admin@test.com / admin123
+router.post("/force-create", async (req, res) => {
   try {
-    const partners = await Partner.find();
+    await Admin.deleteMany({}); // Nettoyage
+    const hashedPassword = await bcrypt.hash("admin123", 10);
 
-    const summary = await Promise.all(
-      partners.map(async (p) => {
-        const count = await Employee.countDocuments({ partenaireId: p._id });
-        return {
-          _id: p._id,
-          entreprise: p.entreprise,
-          responsable: p.responsable,
-          adresse: p.adresse,
-          email: p.email,
-          phone: p.phone,
-          nbEmployes: count,
-        };
-      })
-    );
+    await Admin.create({
+      email: "admin@test.com",
+      password: hashedPassword,
+    });
 
-    res.json(summary);
+    return res.status(201).json({ message: "✅ Admin réinséré avec succès (admin123)" });
   } catch (err) {
-    console.error("❌ Erreur résumé partenaires :", err);
-    res.status(500).json({ message: "Erreur serveur" });
+    console.error("❌ Erreur insertion force-create :", err);
+    return res.status(500).json({ message: "Erreur serveur" });
   }
 });
 

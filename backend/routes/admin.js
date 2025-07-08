@@ -10,14 +10,16 @@ const Employee = require(path.join(__dirname, "..", "models", "Employee"));
 // ✅ Connexion sécurisée admin
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
-
+  console.log("📥 Reçu côté backend :", email, password); // 👈 AJOUT
   try {
     const admin = await Admin.findOne({ email });
+    console.log("🔍 Admin trouvé :", admin); // 👈 AJOUT
     if (!admin) {
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log("🔐 bcrypt result:", isMatch); // 👈 AJOUT
     if (!isMatch) {
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }

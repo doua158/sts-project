@@ -7,29 +7,36 @@ const Admin = require(path.join(__dirname, "..", "models", "Admin"));
 const Partner = require(path.join(__dirname, "..", "models", "Partner"));
 const Employee = require(path.join(__dirname, "..", "models", "Employee"));
 
-// 🔐 Route de connexion admin
+// 🔐 Connexion admin avec logs debug
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
+  console.log("📥 Données reçues :", email, password);
 
   try {
     const admin = await Admin.findOne({ email });
+    console.log("🔍 Admin trouvé :", admin);
+
     if (!admin) {
+      console.log("❌ Aucun admin trouvé pour :", email);
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }
 
     const isMatch = await bcrypt.compare(password, admin.password);
+    console.log("🔐 bcrypt.compare:", isMatch);
+
     if (!isMatch) {
+      console.log("❌ Mot de passe incorrect !");
       return res.status(401).json({ message: "Identifiants admin invalides" });
     }
 
     return res.status(200).json({ token: "admin-token", message: "Connexion réussie" });
   } catch (err) {
-    console.error("❌ Erreur connexion admin :", err);
+    console.error("❌ Erreur login admin :", err);
     return res.status(500).json({ message: "Erreur serveur" });
   }
 });
 
-// 🆕 ROUTE TEMPORAIRE pour insérer admin@test.com / admin123
+// 🛠️ Route temporaire pour réinsérer admin@test.com / admin123
 router.post("/force-create", async (req, res) => {
   try {
     await Admin.deleteMany({}); // Nettoyage

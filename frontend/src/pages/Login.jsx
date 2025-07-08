@@ -93,6 +93,8 @@ export default function PartenaireLogin() {
   const handleAdminLogin = async (e) => {
     e.preventDefault();
     setAdminError("");
+    console.log("🟦 Tentative login admin:", adminLogin); // 👈 AJOUT
+
     try {
       const response = await axios.post(`${API_BASE}/api/admin/login`, adminLogin);
       localStorage.setItem("adminToken", response.data?.token);

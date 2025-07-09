@@ -1,3 +1,4 @@
+// routes/admin.js
 const express = require("express");
 const router = express.Router();
 const path = require("path");
@@ -7,7 +8,7 @@ const Admin = require(path.join(__dirname, "..", "models", "Admin"));
 const Partner = require(path.join(__dirname, "..", "models", "Partner"));
 const Employee = require(path.join(__dirname, "..", "models", "Employee"));
 
-// 🔐 Connexion admin avec logs debug
+// 🔐 Connexion admin
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   console.log("📥 Données reçues :", email, password);
@@ -36,7 +37,7 @@ router.post("/login", async (req, res) => {
   }
 });
 
-// 🛠️ Route temporaire pour réinsérer admin@test.com / admin123
+// 🛠️ Route temporaire pour forcer la création d'un admin
 router.post("/force-create", async (req, res) => {
   try {
     await Admin.deleteMany({}); // Nettoyage

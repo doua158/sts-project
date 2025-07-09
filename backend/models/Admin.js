@@ -1,3 +1,4 @@
+// models/Admin.js
 const mongoose = require("mongoose");
 
 const adminSchema = new mongoose.Schema({
@@ -6,4 +7,3 @@ const adminSchema = new mongoose.Schema({
 });
 
 module.exports = mongoose.model("Admin", adminSchema);
-// Force update pour Git et Render

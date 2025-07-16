@@ -20,21 +20,28 @@ export default function PartnerDashboard() {
 
   const partenaireId = localStorage.getItem("partenaireId");
 
+  // Récupérer les employés d'un partenaire
   const getEmployesByPartner = (id) => axios.get(`${API}/api/employee/by-partner/${id}`);
+  // Ajouter un employé
   const addEmploye = (data) => axios.post(`${API}/api/employee/add`, data);
+  // Supprimer un employé
   const deleteEmploye = (id) => axios.delete(`${API}/api/employee/${id}`);
+  // Mettre à jour un employé
   const updateEmploye = (id, data) => axios.put(`${API}/api/employee/${id}`, data);
 
+  // Format CAD
   const formatCAD = (value) =>
     new Intl.NumberFormat("fr-CA", {
       style: "currency",
       currency: "CAD",
     }).format(value);
 
+  // Vérifier si le partenaire est connecté
   useEffect(() => {
     if (!partenaireId) window.location.href = "/";
   }, [partenaireId]);
 
+  // Récupérer les employés à chaque changement d'onglet
   useEffect(() => {
     if (tab === "list" && partenaireId) {
       getEmployesByPartner(partenaireId)
@@ -43,19 +50,16 @@ export default function PartnerDashboard() {
     }
   }, [tab, partenaireId]);
 
+  // Ajouter un employé
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     try {
-      // Appliquer une réduction de 80% sur le rabais de 10%
-      const rabaisFinal = rabais * 0.2; // Cela donne 2% (réduction de 80% sur 10%)
-      
-      const totalMontant = employes.length * ((50 * rabaisFinal) / 100); // Applique le rabais réduit (2%) sur le montant par employé
-      await addEmploye({ partenaireId, nom, carte, rabais: rabaisFinal, montant: totalMontant });
-      
+      const totalMontant = employes.length * ((90 * rabais) / 100);
+      await addEmploye({ partenaireId, nom, carte, rabais, montant: totalMontant });
       setMessage("✅ Employé ajouté !");
       setNom("");
       setCarte("");
-      setRabais(10); // Réinitialiser à 10% après l'ajout
+      setRabais(10);
       setTab("list");
     } catch (err) {
       console.error("❌ Erreur ajout :", err);
@@ -63,6 +67,7 @@ export default function PartnerDashboard() {
     }
   };
 
+  // Supprimer un employé
   const handleDeleteEmployee = async (id) => {
     try {
       await deleteEmploye(id);
@@ -73,6 +78,7 @@ export default function PartnerDashboard() {
     }
   };
 
+  // Mettre à jour un employé
   const handleUpdateEmployee = async () => {
     try {
       await updateEmploye(editingId, { nom: editNom, carte: editCarte, rabais: editRabais });
@@ -83,11 +89,13 @@ export default function PartnerDashboard() {
     }
   };
 
+  // Déconnexion
   const handleLogout = () => {
     localStorage.removeItem("partenaireId");
     window.location.href = "/";
   };
 
+  // Exporter les employés en PDF
   const exportPDF = () => {
     const doc = new jsPDF();
     doc.text("Liste des employés", 14, 10);
@@ -96,6 +104,7 @@ export default function PartnerDashboard() {
     doc.save("employes.pdf");
   };
 
+  // Calcul des montants
   const montantParEmploye = 50;
   const totalEmployes = employes.length;
   const sousTotal = montantParEmploye * totalEmployes;

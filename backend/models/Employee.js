@@ -17,8 +17,11 @@ const employeeSchema = new mongoose.Schema({
   rabais: {
     type: Number,
     default: 0
+  },
+  montant: {
+    type: Number,
+    default: 90
   }
 });
 
 module.exports = mongoose.model("Employee", employeeSchema);
-// Force update pour Git et Render

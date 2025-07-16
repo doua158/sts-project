@@ -51,21 +51,21 @@ export default function PartnerDashboard() {
   }, [tab, partenaireId]);
 
   // Ajouter un employé
-  const handleAddEmployee = async (e) => {
-    e.preventDefault();
-    try {
-      const totalMontant = employes.length * ((90 * rabais) / 100);
-      await addEmploye({ partenaireId, nom, carte, rabais, montant: totalMontant });
-      setMessage("✅ Employé ajouté !");
-      setNom("");
-      setCarte("");
-      setRabais(10);
-      setTab("list");
-    } catch (err) {
-      console.error("❌ Erreur ajout :", err);
-      setMessage("❌ Erreur lors de l'ajout.");
-    }
-  };
+ const handleAddEmployee = async (e) => {
+  e.preventDefault();
+  try {
+    await addEmploye({ partenaireId, nom, carte, rabais });
+    setMessage("✅ Employé ajouté !");
+    setNom("");
+    setCarte("");
+    setRabais(10);
+    setTab("list");
+  } catch (err) {
+    console.error("❌ Erreur ajout :", err.response?.data || err.message);
+    setMessage("❌ Erreur lors de l'ajout.");
+  }
+};
+
 
   // Supprimer un employé
   const handleDeleteEmployee = async (id) => {

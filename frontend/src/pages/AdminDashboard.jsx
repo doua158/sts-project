@@ -33,10 +33,10 @@ export default function DashboardAdmin() {
     getEmployeesByPartner(id)
       .then((res) => {
         const employeeCount = res.data.length;
-        const totalCost = employeeCount * 90;
+        const totalCost = employeeCount * 90; // Coût de chaque employé (exemple à 90 CAD)
         const costDetails = res.data.map((emp) => ({
           name: emp.nom,
-          cost: 90,
+          cost: 90, // Le coût par employé
         }));
         setCostSummary({ employeeCount, totalCost, costDetails });
       })

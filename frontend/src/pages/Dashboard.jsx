@@ -46,12 +46,16 @@ export default function PartnerDashboard() {
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     try {
-      const totalMontant = employes.length * ((90 * rabais) / 100);
-      await addEmploye({ partenaireId, nom, carte, rabais, montant: totalMontant });
+      // Appliquer une réduction de 80% sur le rabais de 10%
+      const rabaisFinal = rabais * 0.2; // Cela donne 2% (réduction de 80% sur 10%)
+      
+      const totalMontant = employes.length * ((50 * rabaisFinal) / 100); // Applique le rabais réduit (2%) sur le montant par employé
+      await addEmploye({ partenaireId, nom, carte, rabais: rabaisFinal, montant: totalMontant });
+      
       setMessage("✅ Employé ajouté !");
       setNom("");
       setCarte("");
-      setRabais(10);
+      setRabais(10); // Réinitialiser à 10% après l'ajout
       setTab("list");
     } catch (err) {
       console.error("❌ Erreur ajout :", err);

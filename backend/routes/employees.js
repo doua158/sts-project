@@ -3,7 +3,7 @@ const router = express.Router();
 const Employee = require("../models/Employee");
 
 // Ajouter un employé
-router.post("/api/employee/add", async (req, res) => {
+router.post("/add", async (req, res) => {
   const { partenaireId, nom, carte, rabais } = req.body;
   try {
     const montant = 90; // Valeur fixe côté backend
@@ -16,7 +16,7 @@ router.post("/api/employee/add", async (req, res) => {
 });
 
 // Lister les employés d’un partenaire
-router.get("/api/employee/by-partner/:id", async (req, res) => {
+router.get("/by-partner/:id", async (req, res) => {
   try {
     const employes = await Employee.find({ partenaireId: req.params.id });
     res.status(200).json(employes);
@@ -26,7 +26,7 @@ router.get("/api/employee/by-partner/:id", async (req, res) => {
 });
 
 // Modifier un employé
-router.put("/api/employee/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const updated = await Employee.findByIdAndUpdate(req.params.id, req.body, { new: true });
     if (!updated) return res.status(404).json({ message: "Employé non trouvé" });
@@ -37,7 +37,7 @@ router.put("/api/employee/:id", async (req, res) => {
 });
 
 // Supprimer un employé
-router.delete("/api/employee/:id", async (req, res) => {
+router.delete("/:id", async (req, res) => {
   try {
     const deleted = await Employee.findByIdAndDelete(req.params.id);
     if (!deleted) return res.status(404).json({ message: "Employé non trouvé" });

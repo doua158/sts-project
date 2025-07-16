@@ -4,8 +4,9 @@ const Employee = require("../models/Employee");
 
 // Ajouter un employé
 router.post("/api/employee/add", async (req, res) => {
-  const { partenaireId, nom, carte, rabais, montant } = req.body;
+  const { partenaireId, nom, carte, rabais } = req.body;
   try {
+    const montant = 90; // Valeur fixe côté backend
     const newEmp = new Employee({ partenaireId, nom, carte, rabais, montant });
     await newEmp.save();
     res.status(201).json({ message: "Employé ajouté avec succès", employee: newEmp });

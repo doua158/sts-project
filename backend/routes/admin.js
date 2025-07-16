@@ -53,5 +53,29 @@ router.post("/force-create", async (req, res) => {
     return res.status(500).json({ message: "Erreur serveur" });
   }
 });
+// ✅ Récupérer le résumé des partenaires (entreprise, nb employés)
+router.get("/partners-summary", async (req, res) => {
+  try {
+    const partners = await Partner.find();
+
+    // Pour chaque partenaire, compter les employés associés
+    const summary = await Promise.all(partners.map(async (p) => {
+      const employeeCount = await Employee.countDocuments({ partenaireId: p._id });
+      return {
+        entreprise: p.entreprise,
+        responsable: p.responsable,
+        adresse: p.adresse,
+        email: p.email,
+        telephone: p.telephone,
+        nbEmployes: employeeCount
+      };
+    }));
+
+    res.status(200).json(summary);
+  } catch (err) {
+    console.error("❌ Erreur partners-summary :", err);
+    res.status(500).json({ message: "Erreur serveur" });
+  }
+});
 
 module.exports = router;
